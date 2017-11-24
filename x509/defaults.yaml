@@ -1,0 +1,39 @@
+x509:
+  lookup:
+    pkgs:
+      - openssl
+    update_trust_anchors_cmd: 'update-ca-trust extract'
+    locations:
+      trust_anchors_dir: /etc/pki/ca-trust/source/anchors
+      certs_dir: /etc/pki/salt/local/certs
+      keys_dir: /etc/pki/salt/local/keys
+      ca_certs_dir: /etc/pki/salt/ca/certs
+      ca_keys_dir: /etc/pki/salt/ca/keys
+      issued_crls_dir: /etc/pki/salt/issued/crls
+      issued_certs_dir: /etc/pki/salt/issued/certs
+      issued_keys_dir: /etc/pki/salt/issued/keys
+  defaults:
+    base_certificate:
+      C: AU
+      ST: Queensland
+      L: Brisbane
+      O: Example Org Pty Ltd
+      OU: SecDevMonkeyOps
+      Email: secdevmonkeyops@example.org
+      basicConstraints: 'critical CA:false'
+      keyUsage: 'digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment, keyAgreement'
+      subjectKeyIdentifier: 'hash'
+      authorityKeyIdentifier: 'keyid,issuer:always'
+      days_valid: 500
+    ca_certificate:
+      C: AU
+      ST: Queensland
+      L: Brisbane
+      O: Example Org Pty Ltd
+      OU: SecDevMonkeyOps
+      Email: secdevmonkeyops@example.org
+      basicConstraints: 'critical CA:true'
+      keyUsage: 'critical digitalSignature, cRLSign, keyCertSign'
+      subjectKeyIdentifier: 'hash'
+      authorityKeyIdentifier: 'keyid,issuer:always'
+      days_valid: 2000

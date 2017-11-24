@@ -1,0 +1,20 @@
+{% import_yaml 'x509/defaults.yaml' as default_settings %}
+
+{% set os_family_map = salt['grains.filter_by']({
+    'RedHat': {
+      'pkgs': [ 'openssl', 'ca-certificates' ],
+    },
+  }, grain='os_family', default='RedHat', merge=salt['pillar.get']('x509:lookup')) %}
+
+{% do default_settings.x509.update(os_family_map) %}
+
+{% set x509_settings = salt['pillar.get'](
+    'x509',
+    default=default_settings.x509,
+    merge=True
+  )
+%}
+
+{# TODO fix so x509_ca_cert_defaults uses defaults from x509_settings.defaults.base_certificate but overwrites with x509_settings.defaults.ca_certificate #}
+{% set x509_issued_cert_defaults = x509_settings.defaults.base_certificate %}
+{% set x509_ca_cert_defaults = x509_settings.defaults.ca_certificate %}
