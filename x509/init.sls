@@ -122,7 +122,7 @@ trust_anchor_update:
 {{ x509_settings.lookup.locations.certs_dir }}/{{ chain_name }}.crt:
 {% endif %}
   file.managed:
-    - contents_pillar: x509:minion:static:chains:{{ chain_name }}
+    - contents_pillar: x509:minion:static:chains:{{ chain_name }}:content
     - user: root
     - group: root
     - mode: 0644
