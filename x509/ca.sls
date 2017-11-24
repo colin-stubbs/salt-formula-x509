@@ -100,7 +100,21 @@ include:
     - group: {{ x509_settings.ca.signing_policies.group|default('root') }}
     - mode: {{ x509_settings.ca.signing_policies.mode|default('0640') }}
 
-{# TODO - ensure salt-minion service is restarted after changes to signing policy config file #}
+x509-requires-package-at:
+  pkg.installed: []
+
+x509-restart-salt-minion:
+  cmd.wait:
+    - name: echo salt-call --local service.restart salt-minion | at now + 1 minute
+    - order: last
+    - require:
+        - pkg: x509-requires-package-at
+    - watch:
+      {% if 'location' in x509_settings.ca.signing_policies %}
+      - file: {{ x509_settings.ca.signing_policies.location }}:
+      {% else %}
+      - file: /etc/salt/minion.d/signing_policies.conf:
+      {% endif %}
 
 {% endif %} {# if x509.ca.signing_policies #}
 
