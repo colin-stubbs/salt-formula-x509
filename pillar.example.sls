@@ -34,22 +34,26 @@ x509:
     static:
       certificates:
         name:
-          content: | blah
+          content: |
+            blah
         other_name:
           source: salt://x509/files/blah.crt
       keys:
         name:
-          content: | blah
+          content: |
+            blah
         other_name:
           source: salt://x509/files/blah.key
       trust_anchors:
         name:
-          content: | blah
+          content: |
+            blah
         other_name:
           source: salt://x509/files/blah.crt
       chains:
         name:
-          content: | blah
+          content: |
+            blah
         other:
           files:
             - /path/to/file1
@@ -67,7 +71,8 @@ x509:
     static:
       certificates:
         name:
-          content: | blah
+          content: |
+            blah
       keys:
         name:
           file: salt://x509/files/name.key

@@ -91,9 +91,9 @@ x509-pkgs:
     {% elif 'source' in anchor %}
     - source: {{ anchor.source }}
     {% endif %}
-    - user: root
-    - group: root
-    - mode: 0644
+    - user: {{ anchor.user|default('root') }}
+    - group: {{ anchor.group|default('root') }}
+    - mode: {{ anchor.mode|default('0644') }}
     - require:
       - file: {{ x509_settings.lookup.locations.trust_anchors_dir }}
 {% endfor %}
@@ -123,9 +123,9 @@ trust_anchor_update:
 {% endif %}
   file.managed:
     - contents_pillar: x509:minion:static:chains:{{ chain_name }}:content
-    - user: root
-    - group: root
-    - mode: 0644
+    - user: {{ chain.user|default('root') }}
+    - group: {{ chain.group|default('root') }}
+    - mode: {{ chain.mode|default('0644') }}
     - require:
       - file: {{ x509_settings.lookup.locations.trust_anchors_dir }}
 {% elif 'files' in chain %}

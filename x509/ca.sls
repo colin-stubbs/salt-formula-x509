@@ -111,9 +111,9 @@ x509-restart-salt-minion:
         - pkg: x509-requires-package-at
     - watch:
       {% if 'location' in x509_settings.ca.signing_policies %}
-      - file: {{ x509_settings.ca.signing_policies.location }}:
+      - file: {{ x509_settings.ca.signing_policies.location }}
       {% else %}
-      - file: /etc/salt/minion.d/signing_policies.conf:
+      - file: /etc/salt/minion.d/signing_policies.conf
       {% endif %}
 
 {% endif %} {# if x509.ca.signing_policies #}
