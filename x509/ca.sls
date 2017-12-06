@@ -101,7 +101,8 @@ include:
     - mode: {{ x509_settings.ca.signing_policies.mode|default('0640') }}
 
 x509-requires-package-at:
-  pkg.installed: []
+  pkg.installed:
+    - name: at
 
 x509-restart-salt-minion:
   cmd.wait:
