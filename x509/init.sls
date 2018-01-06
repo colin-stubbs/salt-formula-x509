@@ -240,6 +240,5 @@ trust_anchor_update:
 {# TODO: Use 'win_certutil' or 'win_pki' states to install certs ? #}
 
 {% endif %} {# 'minion' in x509_settings #}
-{% endif %} {# 'static' in x509_settings.minion #}
 
 {# EOF #}
