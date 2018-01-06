@@ -137,6 +137,7 @@ x509-pkgs:
       - file: {{ x509_settings.lookup.locations.trust_anchors_dir }}
 {% endfor %}
 
+{% if grains.kernel == 'Linux' %}
 {# Update trust anchors for use by O/S #}
 
 {% if x509_settings.lookup.update_trust_anchors_cmd != '' %}
@@ -148,8 +149,8 @@ trust_anchor_update:
       - file: {{ x509_settings.lookup.locations.trust_anchors_dir }}/{{ anchor_name }}.crt
 {% endfor %}
 {% endif %}
-
 {% endif %} {# trust anchors #}
+{% endif %} {# Linux #}
 
 {# Install/create chains based on pillar #}
 {% if 'chains' in x509_settings.minion.static %}
@@ -230,20 +231,12 @@ trust_anchor_update:
     - require:
       - file: {{ x509_settings.lookup.locations.certs_dir }}
 
-{% endfor %}
+{% endfor %} {# for cert_name, cert in x509_settings.minion.generate.items()|default({}) #}
 
-{% endif %}
-
-{% endif %}
-
-{% elif grains.kernel == 'Darwin' %}
+{% endif %} {# if 'generate' in x509_settings.minion #}
 
 {# TODO: Use 'mac_keychain' state to install certs ? #}
 
-{% elif grains.kernel == 'Windows' %}
-
 {# TODO: Use 'win_certutil' or 'win_pki' states to install certs ? #}
-
-{% endif %}
 
 {# EOF #}
