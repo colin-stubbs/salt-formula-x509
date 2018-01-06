@@ -4,32 +4,46 @@
 
 {% from "x509/map.jinja" import x509_settings, x509_issued_cert_defaults, x509_ca_cert_defaults with context %}
 
-{# Do what's necessary on Linux systems #}
-{% if grains.kernel == 'Linux' %}
-x509-pkgs:
-  pkg.installed:
-    - pkgs: {{ x509_settings.lookup.pkgs }}
-
 {{ x509_settings.lookup.locations.certs_dir }}:
   file.directory:
     - makedirs: True
     - user: root
+    {% if grains.kernel == 'Windows' %}
+    {% elif grains.kernel == 'Darwin' %}
+    - group: wheel
+    {% else %}
     - group: root
+    {% endif %}
     - mode: 0755
 
 {{ x509_settings.lookup.locations.keys_dir }}:
   file.directory:
     - makedirs: True
-    - user: root
+    {% if grains.kernel == 'Windows' %}
+    {% elif grains.kernel == 'Darwin' %}
+    - group: wheel
+    {% else %}
     - group: root
+    {% endif %}
     - mode: 0755
 
 {{ x509_settings.lookup.locations.trust_anchors_dir }}:
   file.directory:
     - makedirs: True
-    - user: root
+    {% if grains.kernel == 'Windows' %}
+    {% elif grains.kernel == 'Darwin' %}
+    - group: wheel
+    {% else %}
     - group: root
+    {% endif %}
     - mode: 0755
+
+{# Do what's necessary on Linux systems #}
+{% if grains.kernel == 'Linux' %}
+x509-pkgs:
+  pkg.installed:
+    - pkgs: {{ x509_settings.lookup.pkgs }}
+{% endif %}
 
 {# Install static certificates based on pillar #}
 {% if 'minion' in x509_settings %}
@@ -47,9 +61,20 @@ x509-pkgs:
     {% elif 'source' in certificate %}
     - source: {{ certificate.source }}
     {% endif %}
+    {% if grains.kernel == 'Windows' %}
+#    - win_owner: Administrator
+#    - win_perms: {'Administrators': {'perms': 'full_control'}}
+#    - win_deny_perms: {'Administrators': {'perms': 'full_control'}}
+#    - win_inheritance: True
+    {% elif grains.kernel == 'Linux' or grains.kernel == 'Darwin' %}
     - user: {{ certificate.user|default('root') }}
+    {% if grains.kernel == 'Darwin' %}
+    - group: {{ certificate.group|default('wheel') }}
+    {% else %}
     - group: {{ certificate.group|default('root') }}
+    {% endif %}
     - mode: {{ certificate.mode|default('0644') }}
+    {% endif %}
     - require:
       - file: {{ x509_settings.lookup.locations.certs_dir }}
 {% endfor %}
@@ -69,9 +94,16 @@ x509-pkgs:
     {% elif 'source' in private_key %}
     - source: {{ private_key.source }}
     {% endif %}
+    {% if grains.kernel == 'Windows' %}
+    {% else %}
     - user: {{ private_key.user|default('root') }}
+    {% if grains.kernel == 'Darwin' %}
+    - group: {{ private_key.group|default('wheel') }}
+    {% else %}
     - group: {{ private_key.group|default('root') }}
+    {% endif %}
     - mode: {{ private_key.mode|default('0644') }}
+    {% endif %}
     - require:
       - file: {{ x509_settings.lookup.locations.keys_dir }}
 {% endfor %}
@@ -91,9 +123,16 @@ x509-pkgs:
     {% elif 'source' in anchor %}
     - source: {{ anchor.source }}
     {% endif %}
+    {% if grains.kernel == 'Windows' %}
+    {% else %}
     - user: {{ anchor.user|default('root') }}
-    - group: {{ anchor.group|default('root') }}
+    {% if grains.kernel == 'Darwin' %}
+    - group: {{ chain.group|default('wheel') }}
+    {% else %}
+    - group: {{ chain.group|default('root') }}
+    {% endif %}
     - mode: {{ anchor.mode|default('0644') }}
+    {% endif %}
     - require:
       - file: {{ x509_settings.lookup.locations.trust_anchors_dir }}
 {% endfor %}
@@ -123,9 +162,16 @@ trust_anchor_update:
 {% endif %}
   file.managed:
     - contents_pillar: x509:minion:static:chains:{{ chain_name }}:content
+    {% if grains.kernel == 'Windows' %}
+    {% else %}
     - user: {{ chain.user|default('root') }}
+    {% if grains.kernel == 'Darwin' %}
+    - group: {{ chain.group|default('wheel') }}
+    {% else %}
     - group: {{ chain.group|default('root') }}
+    {% endif %}
     - mode: {{ chain.mode|default('0644') }}
+    {% endif %}
     - require:
       - file: {{ x509_settings.lookup.locations.trust_anchors_dir }}
 {% elif 'files' in chain %}
@@ -197,7 +243,6 @@ trust_anchor_update:
 {% elif grains.kernel == 'Windows' %}
 
 {# TODO: Use 'win_certutil' or 'win_pki' states to install certs ? #}
-
 
 {% endif %}
 
