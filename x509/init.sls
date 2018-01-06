@@ -7,36 +7,53 @@
 {{ x509_settings.lookup.locations.certs_dir }}:
   file.directory:
     - makedirs: True
-    - user: root
     {% if grains.kernel == 'Windows' %}
+    - win_owner: Administrator
+    - win_perms: {'Administrators': {'perms': 'full_control'}}
+    - win_inheritance: False
     {% elif grains.kernel == 'Darwin' %}
+    - user: root
     - group: wheel
-    {% else %}
-    - group: root
-    {% endif %}
     - mode: 0755
+    {% else %}
+    - user: root
+    - group: root
+    - mode: 0755
+    {% endif %}
 
 {{ x509_settings.lookup.locations.keys_dir }}:
   file.directory:
     - makedirs: True
     {% if grains.kernel == 'Windows' %}
+    - win_owner: Administrator
+    - win_perms: {'Administrators': {'perms': 'full_control'}}
+    - win_inheritance: False
     {% elif grains.kernel == 'Darwin' %}
+    - user: root
     - group: wheel
-    {% else %}
-    - group: root
-    {% endif %}
     - mode: 0755
+    {% else %}
+    - user: root
+    - group: root
+    - mode: 0755
+    {% endif %}
 
 {{ x509_settings.lookup.locations.trust_anchors_dir }}:
   file.directory:
     - makedirs: True
     {% if grains.kernel == 'Windows' %}
+    - win_owner: Administrator
+    - win_perms: {'Administrators': {'perms': 'full_control'}}
+    - win_inheritance: False
     {% elif grains.kernel == 'Darwin' %}
+    - user: root
     - group: wheel
-    {% else %}
-    - group: root
-    {% endif %}
     - mode: 0755
+    {% else %}
+    - user: root
+    - group: root
+    - mode: 0755
+    {% endif %}
 
 {# Do what's necessary on Linux systems #}
 {% if grains.kernel == 'Linux' %}
@@ -62,10 +79,6 @@ x509-pkgs:
     - source: {{ certificate.source }}
     {% endif %}
     {% if grains.kernel == 'Windows' %}
-#    - win_owner: Administrator
-#    - win_perms: {'Administrators': {'perms': 'full_control'}}
-#    - win_deny_perms: {'Administrators': {'perms': 'full_control'}}
-#    - win_inheritance: True
     {% elif grains.kernel == 'Linux' or grains.kernel == 'Darwin' %}
     - user: {{ certificate.user|default('root') }}
     {% if grains.kernel == 'Darwin' %}
