@@ -140,9 +140,9 @@ x509-pkgs:
     {% else %}
     - user: {{ anchor.user|default('root') }}
     {% if grains.kernel == 'Darwin' %}
-    - group: {{ chain.group|default('wheel') }}
+    - group: {{ anchor.group|default('wheel') }}
     {% else %}
-    - group: {{ chain.group|default('root') }}
+    - group: {{ anchor.group|default('root') }}
     {% endif %}
     - mode: {{ anchor.mode|default('0644') }}
     {% endif %}
