@@ -199,7 +199,7 @@ trust_anchor_update:
 
 {# Generate certificates for the minion based on pillar #}
 
-{% grains.kernel == 'Linux' and 'generate' in x509_settings.minion %}
+{% if grains.kernel == 'Linux' and 'generate' in x509_settings.minion %}
 
 {% for cert_name, cert in x509_settings.minion.generate.items()|default({}) %}
 
