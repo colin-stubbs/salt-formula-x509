@@ -161,7 +161,7 @@ x509-pkgs:
 {% if anchor_store == 'root' %}
 {% set anchor_store_name = 'Root' %}
 {% elif anchor_store == 'intermediate' %}
-{% set anchor_store_name = 'Intermediate Certificate Authorities' %}
+{% set anchor_store_name = 'CA' %}
 {% endif %}
 
 {% if 'location' in anchor %}
