@@ -18,9 +18,14 @@
     },
     'Windows': {
       'locations': {
-        'trust_anchors_dir': 'c:\\salt\pki\\x509\\anchors',
-        'certs_dir': 'c:\\salt\\pki\\x509\\local\\certs',
-        'keys_dir': 'c:\\salt\\pki\\x509\\local\\keys',
+        'trust_anchors_dir': 'c:/salt/pki/x509/anchors',
+        'certs_dir': 'c:/salt/pki/x509/local/certs',
+        'keys_dir': 'c:/salt/pki/x509/local/keys',
+        'ca_certs_dir': 'c:/etc/pki/salt/ca/certs',
+        'ca_keys_dir': 'c:/etc/pki/salt/ca/keys',
+        'issued_crls_dir': 'c:/etc/pki/salt/issued/crls',
+        'issued_certs_dir': 'c:/etc/pki/salt/issued/certs',
+        'issued_keys_dir': 'c:/etc/pki/salt/issued/keys',
       },
     },
   }, grain='os_family', default='RedHat', merge=salt['pillar.get']('x509:lookup')) %}
