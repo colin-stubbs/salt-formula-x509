@@ -159,7 +159,7 @@ x509-pkgs:
 
 {% set anchor_store = anchor.store|default('root') %}
 {% if anchor_store == 'root' %}
-{% set anchor_store_name = 'Trusted Root Certificate Authorities' %}
+{% set anchor_store_name = 'Root' %}
 {% elif anchor_store == 'intermediate' %}
 {% set anchor_store_name = 'Intermediate Certificate Authorities' %}
 {% endif %}
