@@ -157,7 +157,7 @@ x509-pkgs:
 
 {# TODO: Use 'win_certutil' or 'win_pki' states to install certs ? #}
 
-{% set anchor_store = anchor.store|default('root)' %}
+{% set anchor_store = anchor.store|default('root') %}
 {% if anchor_store == 'root' %}
 {% set anchor_store_name = 'Trusted Root Certificate Authorities' %}
 {% elif anchor_store == 'intermediate' %}
