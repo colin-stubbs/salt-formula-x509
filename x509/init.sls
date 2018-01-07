@@ -169,13 +169,12 @@ install-{{ anchor.location }}:
 {% else %}
 install-{{ x509_settings.lookup.locations.trust_anchors_dir }}/{{ anchor_name }}.crt:
 {% endif %}
-  win_pki.import_cert:
+  win_certutil.add_store:
   {% if 'location' in anchor %}
     - name: install-{{ anchor.location }}
   {% else %}
     - name: {{ x509_settings.lookup.locations.trust_anchors_dir }}/{{ anchor_name }}.crt
   {% endif %}
-    - cert_format: 'cer'
     - store: '{{ anchor_store_name }}'
 
 {% endif %}
