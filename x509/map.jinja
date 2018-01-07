@@ -18,9 +18,9 @@
     },
     'Windows': {
       'locations': {
-        'trust_anchors_dir': 'c:\salt\pki\x509\anchors',
-        'certs_dir': 'c:\salt\pki\x509\local\certs',
-        'keys_dir': 'c:\salt\pki\x509\local\keys',
+        'trust_anchors_dir': 'c:\\salt\pki\\x509\\anchors',
+        'certs_dir': 'c:\\salt\\pki\\x509\\local\\certs',
+        'keys_dir': 'c:\\salt\\pki\\x509\\local\\keys',
       },
     },
   }, grain='os_family', default='RedHat', merge=salt['pillar.get']('x509:lookup')) %}
